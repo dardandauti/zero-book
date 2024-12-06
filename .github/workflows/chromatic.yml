@@ -20,12 +20,14 @@ jobs:
         with:
           #👇 Sets the version of Node.js to use
           node-version: 20
-      - name: Install dependencies
-        # ⚠️ See your package manager's documentation for the correct command to install dependencies in a CI environment.
+      - name:
+          Downlaod latest bun
+          #👇 Downloads latest version of bun to use for installing dependencies
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
-      - run: bun install
+      - name: Install dependencies
+        run: bun install
       - name: Run Chromatic
         uses: chromaui/action@latest
         with:
