@@ -5,24 +5,31 @@ on: push
 
 # What the action will do
 jobs:
-  test:
+  chromatic:
+    name: Run Chromatic
     # The operating system it will run on
     runs-on: ubuntu-latest
     # The list of steps that the action will go through
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
           #👇 Fetches all history so Chromatic can compare against previous builds
           fetch-depth: 0
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           #👇 Sets the version of Node.js to use
-          node-version: 16
-      - run: yarn
-        #👇 Adds Chromatic as a step in the workflow
-      - uses: chromaui/action@v1
-        # Options required for Chromatic's GitHub Action
+          node-version: 20
+      - name:
+          Downlaod latest bun
+          #👇 Downloads latest version of bun to use for installing dependencies
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Install dependencies
+        run: bun install
+      - name: Run Chromatic
+        uses: chromaui/action@latest
         with:
           #👇 Chromatic projectToken, see https://storybook.js.org/tutorials/design-systems-for-developers/react/en/review/ to obtain it
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          token: ${{ secrets.GITHUB_TOKEN }}
